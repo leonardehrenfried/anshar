@@ -18,6 +18,7 @@ package no.rutebanken.anshar.routes.validation;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.hazelcast.map.IMap;
 import com.hazelcast.replicatedmap.ReplicatedMap;
+import java.io.InputStreamReader;
 import no.rutebanken.anshar.config.AnsharConfiguration;
 import no.rutebanken.anshar.metrics.PrometheusMetricsService;
 import no.rutebanken.anshar.routes.siri.transformer.ApplicationContextHolder;
@@ -176,13 +177,6 @@ public class SiriXmlValidator extends ApplicationContextHolder {
         }
     }
 
-
-    public Siri parseXml(SubscriptionSetup subscriptionSetup, String xml)
-        throws XMLStreamException {
-        ByteArrayInputStream stream = new ByteArrayInputStream(xml.getBytes());
-        return parseXml(subscriptionSetup, stream);
-    }
-
     public Siri parseXml(SubscriptionSetup subscriptionSetup, InputStream xml)
         throws XMLStreamException {
         try {
@@ -190,7 +184,7 @@ public class SiriXmlValidator extends ApplicationContextHolder {
 
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-            XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(xml);
+            XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(new InputStreamReader(xml, StandardCharsets.UTF_8));
 
             final SiriValidationEventHandler schemaValidationHandler = new SiriValidationEventHandler();
 

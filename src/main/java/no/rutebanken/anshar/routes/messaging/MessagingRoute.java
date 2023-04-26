@@ -185,7 +185,7 @@ public class MessagingRoute extends RestRouteBuilder {
                 .to("direct:set.mdc.subscriptionId")
                 .process(p -> {
                     SubscriptionSetup subscriptionSetup = subscriptionManager.get(p.getIn().getHeader("subscriptionId", String.class));
-                    Siri originalInput = siriXmlValidator.parseXml(subscriptionSetup, p.getIn().getBody(String.class));
+                    Siri originalInput = siriXmlValidator.parseXml(subscriptionSetup, p.getIn().getBody(InputStream.class));
 
                     Siri incoming = SiriValueTransformer.transform(originalInput, subscriptionSetup.getMappingAdapters(), false, true);
 
